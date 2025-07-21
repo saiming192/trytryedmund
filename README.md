@@ -1,48 +1,17 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>圖案移動小遊戲</title>
-  <style>
-    #game {
-      width: 1000px;
-      height: 500px;
-      border: 2px solid #000;
-      position: relative;
-    }
-    #player {
-      width: 50px;
-      height: 50px;
-      background-color: red;
-      position: absolute;
-      top: 75px;
-      left: 0;
-    }
-  </style>
-</head>
-<body>
-  <h2>按左鍵讓圖案向左移動！</h2>
-  <div id="game">
-    <div id="player"></div>
-  </div>
-  <button onclick="moveLeft()">← 左移</button>
-  <button onclick="moveright()">← 右移</button>
+  <head>
+    <meta charset="UTF-8">
+    <title>我的第一個網頁</title>
+  </head>
+  <body>
+    <h1>歡迎來到我的網站！</h1>
+    <p>這是我做的第一個網頁，很開心能開始學習！</p>
 
-  <script>
-  let player = document.getElementById("player");
-  let position = 0;
+    <img src="https://placekitten.com/300/200" alt="可愛小貓">
 
-  function moveLeft() {
-    position -= 20;  // 每次向左移動 20px
-    if (position < 0) position = 0;  // 不讓超出邊界
-    player.style.left = position + "px";
-  }
+    <p>我正在學習 HTML、CSS 和 JavaScript</p>
 
-  function moveright() {
-    position += 20;  // 每次向右移動 20px
-    if (position > 950) position = 950;  // 不讓超出邊界 (1000 - 50)
-    player.style.left = position + "px";
-  }
-</script>
-</body>
+    <button onclick="alert('你好，歡迎來到我的網站！')">點我一下</button>
+  </body>
 </html>
