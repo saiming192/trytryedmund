@@ -5,8 +5,8 @@
   <title>圖案移動小遊戲</title>
   <style>
     #game {
-      width: 500px;
-      height: 200px;
+      width: 1000px;
+      height: 500px;
       border: 2px solid #000;
       position: relative;
     }
@@ -26,6 +26,7 @@
     <div id="player"></div>
   </div>
   <button onclick="moveLeft()">← 左移</button>
+  <button onclick="moveright()">← 右移</button>
 
   <script>
     let player = document.getElementById("player");
