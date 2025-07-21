@@ -29,14 +29,20 @@
   <button onclick="moveright()">← 右移</button>
 
   <script>
-    let player = document.getElementById("player");
-    let position = 0;
+  let player = document.getElementById("player");
+  let position = 0;
 
-    function moveLeft() {
-      position -= 20;  // 每次向左移動 20px
-      if (position < 0) position = 0;  // 不讓超出邊界
-      player.style.left = position + "px";
-    }
-  </script>
+  function moveLeft() {
+    position -= 20;  // 每次向左移動 20px
+    if (position < 0) position = 0;  // 不讓超出邊界
+    player.style.left = position + "px";
+  }
+
+  function moveright() {
+    position += 20;  // 每次向右移動 20px
+    if (position > 950) position = 950;  // 不讓超出邊界 (1000 - 50)
+    player.style.left = position + "px";
+  }
+</script>
 </body>
 </html>
