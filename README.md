@@ -8,7 +8,7 @@
     <h1>歡迎來到我的網站！</h1>
     <p>這是我做的第一個網頁，很開心能開始學習！</p>
 
-    <img src="https://placekitten.com/300/200" alt="可愛小貓">
+<img src="https://placebear.com/300/200" alt="小熊" />
 
     <p>我正在學習 HTML、CSS 和 JavaScript</p>
 
