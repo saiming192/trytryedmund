@@ -16,7 +16,7 @@
     .sidebar {
       width: 200px;
       background-color: #f0f0f0;
-      padding: 20px;
+      padding: 0px;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     }
 
