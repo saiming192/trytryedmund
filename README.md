@@ -24,7 +24,7 @@
       display: block;
       width: 100%;
       margin-bottom: 10px;
-      padding: 10px;
+      padding: 0px;
       border: none;
       background-color: #ddd;
       cursor: pointer;
@@ -38,7 +38,7 @@
     /* 右邊內容區 */
     .content {
       flex: 1;
-      padding: 40px;
+      padding: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
