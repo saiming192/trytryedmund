@@ -2,99 +2,177 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>簡易電商展示頁</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>夾公仔機小遊戲</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
+      background: #f1f1f1;
+      overflow: hidden;
+      font-family: sans-serif;
+      user-select: none;
+    }
+
+    #game {
+      position: relative;
+      width: 100vw;
       height: 100vh;
+      background: #d0eaff;
+      overflow: hidden;
     }
 
-    /* 左邊選單 */
-    .sidebar {
-      width: 100px;
-      background-color: #f0f0f0;
-      padding: 0px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    #claw {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: gray;
+      border-radius: 50%;
+      top: 50px;
+      left: 50px;
+      z-index: 10;
     }
 
-    .sidebar button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 0px;
+    .doll {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-image: url('https://i.imgur.com/5Z3mI6o.png'); /* 示意圖：可換 Chiikawa */
+      background-size: cover;
+    }
+
+    #hole {
+      position: absolute;
+      width: 80px;
+      height: 40px;
+      background: black;
+      bottom: 20px;
+      left: 20px;
+      border-radius: 50% / 100%;
+      z-index: 1;
+    }
+
+    #startBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: #f39c12;
+      color: white;
       border: none;
-      background-color: #ddd;
+      border-radius: 10px;
       cursor: pointer;
-      text-align: left;
     }
 
-    .sidebar button:hover {
-      background-color: #ccc;
-    }
-
-    /* 右邊內容區 */
-    .content {
-      flex: 1;
-      padding: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .product-image {
-      width: 300px;
-      height: 200px;
-      background-color: #eee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .product-name {
-      font-size: 24px;
-      font-weight: bold;
+    #timer {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-
-  <!-- 左邊：商品選單 -->
-  <div class="sidebar">
-    <button onclick="showProduct(1)">商品一</button>
-    <button onclick="showProduct(2)">商品二</button>
-    <button onclick="showProduct(3)">商品三</button>
-    <button onclick="showProduct(4)">商品四</button>
-    <button onclick="showProduct(5)">商品五</button>
+  <div id="game">
+    <div id="claw"></div>
+    <div id="hole"></div>
+    <div class="doll" style="left: 300px; bottom: 50px;"></div>
+    <div class="doll" style="left: 400px; bottom: 50px;"></div>
+    <div id="timer">倒數：10</div>
+    <button id="startBtn">開始</button>
   </div>
 
-  <!-- 右邊：商品展示 -->
-  <div class="content">
-    <div class="product-image" id="productImage">圖片區</div>
-    <div class="product-name" id="productName">請選擇商品</div>
-  </div>
-
-  <!-- JavaScript -->
   <script>
-    function showProduct(index) {
-      const names = ["商品一", "商品二", "商品三", "商品四", "商品五"];
-      const imageUrls = [
-        "https://placehold.co/300x200?text=商品一",
-        "https://placehold.co/300x200?text=商品二",
-        "https://placehold.co/300x200?text=商品三",
-        "https://placehold.co/300x200?text=商品四",
-        "https://placehold.co/300x200?text=商品五"
-      ];
+    const claw = document.getElementById('claw');
+    const dolls = document.querySelectorAll('.doll');
+    const startBtn = document.getElementById('startBtn');
+    const timerDisplay = document.getElementById('timer');
 
-      document.getElementById("productName").textContent = names[index - 1];
-      document.getElementById("productImage").innerHTML = `<img src="${imageUrls[index - 1]}" alt="${names[index - 1]}" style="max-width: 100%; max-height: 100%;">`;
+    let moving = false;
+    let timer = 10;
+    let interval;
+    let clawSpeed = 10;
+
+    let forceType = 'weak'; // 預設弱力
+
+    function getRandomForce() {
+      const rand = Math.floor(Math.random() * 10);
+      if (rand === 0) return 'strong';
+      if (rand === 1) return 'medium';
+      return 'weak';
     }
-  </script>
 
+    function moveClaw(e) {
+      if (!moving) return;
+      const rect = claw.getBoundingClientRect();
+      let left = claw.offsetLeft;
+      let top = claw.offsetTop;
+      if (e.key === 'ArrowLeft') left -= clawSpeed;
+      if (e.key === 'ArrowRight') left += clawSpeed;
+      if (e.key === 'ArrowUp') top -= clawSpeed;
+      if (e.key === 'ArrowDown') top += clawSpeed;
+
+      claw.style.left = `${Math.max(0, Math.min(window.innerWidth - 60, left))}px`;
+      claw.style.top = `${Math.max(0, Math.min(window.innerHeight - 60, top))}px`;
+    }
+
+    function dropClaw() {
+      moving = false;
+      document.removeEventListener('keydown', moveClaw);
+      const clawRect = claw.getBoundingClientRect();
+      const holeRect = document.getElementById('hole').getBoundingClientRect();
+
+      let grabbed = false;
+
+      dolls.forEach(doll => {
+        const dollRect = doll.getBoundingClientRect();
+        const isOverlap = !(clawRect.right < dollRect.left ||
+                            clawRect.left > dollRect.right ||
+                            clawRect.bottom < dollRect.top ||
+                            clawRect.top > dollRect.bottom);
+        if (isOverlap) {
+          const force = getRandomForce();
+          forceType = force;
+          if (force === 'strong') {
+            doll.style.transition = '1s';
+            doll.style.left = holeRect.left + 'px';
+            doll.style.bottom = '20px';
+            grabbed = true;
+          } else if (force === 'medium') {
+            // 50% 成功
+            if (Math.random() < 0.5) {
+              doll.style.transition = '1s';
+              doll.style.left = holeRect.left + 'px';
+              doll.style.bottom = '20px';
+              grabbed = true;
+            }
+          }
+        }
+      });
+
+      if (!grabbed) {
+        alert('夾不到或公仔滑掉了！（爪力：' + forceType + '）');
+      }
+    }
+
+    function startGame() {
+      timer = 10;
+      timerDisplay.innerText = `倒數：${timer}`;
+      moving = true;
+      forceType = 'weak';
+      document.addEventListener('keydown', moveClaw);
+
+      interval = setInterval(() => {
+        timer--;
+        timerDisplay.innerText = `倒數：${timer}`;
+        if (timer <= 0) {
+          clearInterval(interval);
+          dropClaw();
+        }
+      }, 1000);
+    }
+
+    startBtn.addEventListener('click', startGame);
+  </script>
 </body>
 </html>
-
